@@ -1,0 +1,37 @@
+version: '3.4'
+
+services:
+  mysql:
+    image: mysql:5.7.27
+    restart: unless-stopped
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./runtime/docker/mysql/data:/var/lib/mysql
+      - ./docker/dev/mysql/conf:/etc/mysql/conf.d
+      - ./docker/dev/mysql/init:/docker-entrypoint-initdb.d
+
+  php:
+    build: ./docker/dev/php
+    restart: unless-stopped
+    environment:
+      - PHP_DIR_OWNER=1000
+      - RUN_USER=1000
+    volumes:
+      - .:/var/www
+      - ./runtime/docker/php/data:/var/php
+      - ./docker/dev/php/env.conf:/usr/local/etc/php-fpm.d/env.conf
+
+  nginx:
+    image: nginx:1.15.2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    environment:
+      - TZ=Europe/Moscow
+    volumes:
+      - ./runtime/docker/nginx/logs:/var/log/nginx
+      - ./docker/dev/nginx/conf:/etc/nginx/conf.d
+      - .:/var/www:ro
