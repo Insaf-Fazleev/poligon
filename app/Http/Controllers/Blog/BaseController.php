@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\Blog;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Http\Request;
 
-class BaseController extends Controller
+abstract class BaseController extends Controller
 {
     //
 }
