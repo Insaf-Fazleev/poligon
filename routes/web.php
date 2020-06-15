@@ -24,6 +24,13 @@ Route::group($groupData, function () {
         ->names('blog.admin.categories');
 });
 
+Route::group($groupData, function () {
+    //BlogPost
+    Route::resource('posts', 'PostController')
+        ->except(['show'])
+        ->names('blog.admin.posts');
+});
+
 //Route::resource('rest', 'RestTestController')->names('restTest');
 
 
