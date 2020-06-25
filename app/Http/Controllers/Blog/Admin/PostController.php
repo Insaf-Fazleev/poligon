@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Blog\Admin;
 
+use App\Http\Requests\BlogPostUpdateRequest;
 use App\Repositories\BlogCategoryRepository;
 use App\Repositories\BlogPostRepository;
 use Illuminate\Http\Request;
@@ -86,26 +87,47 @@ class PostController extends BaseController
      */
     public function edit($id)
     {
-        $item = $this->blogCategoryRepository->getEdit($id);
+        $item = $this->blogPostRepository->getEdit($id);
         if(empty($item)) {
             abort(404);
         }
 
         $categoryList = $this->blogCategoryRepository->getForComboBox();
 
-        return view('blog.admin.post.edit', compact('item', 'categoryList'));
+        return view('blog.admin.posts.edit', compact('item', 'categoryList'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  BlogPostUpdateRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(BlogPostUpdateRequest $request, $id)
     {
-        //
+        $item = $this->blogPostRepository->getEdit($id);
+
+        if(empty($item)) {
+            return back()
+                ->withErrors(["msg' => 'Запись id=[{$id}] не найдена"])
+                ->withInput();
+        }
+
+        $data = $request->all();
+
+        $result = $item->update($data);
+
+        if($result) {
+            return redirect()
+                ->route('blog.admin.posts.edit', $item->id)
+                ->with(['success' => 'Успешно сохранено']);
+        } else {
+            return back()
+                ->withErrors(['msg' => 'Ошибка сохранения'])
+                ->withInput();
+        }
+
     }
 
     /**
