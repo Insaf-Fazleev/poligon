@@ -33,7 +33,7 @@ class CategoryController extends BaseController
      */
     public function index()
     {
-        $paginator = $this->blogCategoryRepository->getAllWithPaginate(5); //дать все записи с пагинацией
+        $paginator = $this->blogCategoryRepository->getAllWithPaginate(5);
 
         return view('blog.admin.categories.index', compact('paginator'));
     }
@@ -62,6 +62,7 @@ class CategoryController extends BaseController
         if (empty($data['slug'])) {
             $data['slug'] = Str::slug($data['title']);
         }
+
         //Создаст объект и добавить в БД
         $item = (new BlogCategory())->create($data);
 
