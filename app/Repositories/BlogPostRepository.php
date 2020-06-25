@@ -5,10 +5,16 @@ namespace App\Repositories;
 use App\Models\BlogPost as Model;
 use Illuminate\Pagination\LengthAwarePaginator;
 
+
+/**
+ * Class BlogPostRepository
+ *
+ * @package App\Repositories
+ */
 class BlogPostRepository extends CoreRepository
 {
     /**
-     * @return string
+     * @return mixed|string
      */
     protected function getModelClass()
     {
@@ -34,10 +40,28 @@ class BlogPostRepository extends CoreRepository
         ];
 
         $result = $this->startConditions()
-                        ->select($columns)
-                        ->orderBy('id', 'DESC')
-                        ->paginate(10);
+            ->select($columns)
+            ->orderBy('id', 'DESC')
+            ->with([
+                'category' => function ($query) {
+                    $query->select(['id', 'title']);
+                },
+                'user:id,name'
+            ])
+            ->paginate(25);
 
         return $result;
+    }
+
+    /**
+     * Получить модель для редактирования в админке.
+     *
+     * @param int $id
+     *
+     * @return Model
+     */
+    public function getEdit($id)
+    {
+        return $this->startConditions()->find($id);
     }
 }
