@@ -59,9 +59,6 @@ class CategoryController extends BaseController
     public function store(BlogCategoryCreateRequest $request)
     {
         $data = $request->input();
-        if (empty($data['slug'])) {
-            $data['slug'] = Str::slug($data['title']);
-        }
 
         //Создаст объект и добавить в БД
         $item = (new BlogCategory())->create($data);
@@ -98,8 +95,9 @@ class CategoryController extends BaseController
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param BlogCategoryUpdateRequest $request
      * @param int $id
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(BlogCategoryUpdateRequest $request, $id)
@@ -111,9 +109,6 @@ class CategoryController extends BaseController
                 ->withInput();
         }
         $data = $request->all();
-        if (empty($data['slug'])) {
-            $data['slug'] = \Str::slug($data['title']);
-        }
 
         $result = $item->update($data);
 
