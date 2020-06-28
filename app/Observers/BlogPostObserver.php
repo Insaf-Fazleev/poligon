@@ -24,6 +24,17 @@ class BlogPostObserver
     }
 
     /**
+     * Handle the blog post "created" event.
+     *
+     * @param \App\Models\BlogPost $blogPost
+     * @return void
+     */
+    public function created(BlogPost $blogPost)
+    {
+        //
+    }
+
+    /**
      * Отработка ПЕРЕД обновлением записи.
      *
      * @param BlogPost $blogPost
@@ -33,6 +44,17 @@ class BlogPostObserver
         $this->setPublishedAt($blogPost);
 
         $this->setSlug($blogPost);
+    }
+
+    /**
+     * Handle the blog post "updated" event.
+     *
+     * @param \App\Models\BlogPost $blogPost
+     * @return void
+     */
+    public function updated(BlogPost $blogPost)
+    {
+        //
     }
 
     /**
@@ -85,25 +107,12 @@ class BlogPostObserver
     }
 
     /**
-     * Handle the blog post "created" event.
-     *
      * @param \App\Models\BlogPost $blogPost
-     * @return void
      */
-    public function created(BlogPost $blogPost)
+    public function deleting(BlogPost $blogPost)
     {
-        //
-    }
-
-    /**
-     * Handle the blog post "updated" event.
-     *
-     * @param \App\Models\BlogPost $blogPost
-     * @return void
-     */
-    public function updated(BlogPost $blogPost)
-    {
-        //
+        //dd(__METHOD__, $blogPost);
+        //return false;
     }
 
     /**
